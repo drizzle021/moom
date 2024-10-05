@@ -1,137 +1,22 @@
 <template>
   <q-layout view="hHh LpR lfr">
-    <q-header elevated>
-      <q-toolbar>
-        <q-avatar size="60px" color="secondary" text-color="white" class="q-ml-sm">
-                    Logo
-        </q-avatar>
-
-        <q-avatar
-          icon="tag"
-          class="q-ml-lg"
-        />
-
-        <q-toolbar-title>
-          ChannelName
-        </q-toolbar-title>
-
-        <q-btn 
-          dense 
-          flat 
-          round 
-          icon="account_circle"  
-        />
-
-        
-
-        <q-btn 
-          dense 
-          flat 
-          round 
-          icon="group" 
-          @click="toggleRightDrawer" 
-        />
-
-        <q-input outlined v-model="text1" label="Search" maxlength="30" rounded class="q-pa-sm" dense bg-color="white" >
-          
-
-       </q-input>
-
-
-      </q-toolbar>
-    </q-header>
+   <NavBar/>
 
     <!--on mobile layout add button for opening channel list-->
 
-    <q-drawer 
-      show-if-above
-      :width="100"
-      class="bg-primary"
-      >      
-      <q-scroll-area style="height: inherit; " >
-          <q-list class="column flex-center" >
-            <q-item>
-              <q-item-section>
-                <q-avatar size="60px" color="secondary" text-color="white" icon="add">
-                    
-                </q-avatar>
-              </q-item-section>
-            </q-item>
+    <ChannelsDrawer/>
+    
+    <MembersDrawer/>
 
-            <q-item v-for="channel in channelList" :key="channel.name" v-bind="channel">
-              <q-item-section>
-                <q-avatar v-if="channel.icon==null" size="60px" color="secondary" text-color="white">
-                  {{ channel.name[0] }}
-                </q-avatar>
-                <q-avatar v-else size="60px">
-                  <img :src="channel.icon">
-                </q-avatar>
+    <!-- <MembersDrawer v-on:profile-click="showProfile"/> -->
 
-                <q-tooltip anchor="center right" self="center left" :offset="[10, 10]" transition-show="fade" transition-duration="500"  class="text-body1">
-                  {{ channel.name }}
-                </q-tooltip>
-              </q-item-section>
-            </q-item>
-
-          </q-list>
-
-      </q-scroll-area>
-      
-    </q-drawer>
-
-    <q-drawer v-model="rightDrawerOpen" side="right" :width="400" show-if-above>
-
-      <q-list>
-        <q-item-label
-          header
-        >
-          <q-btn
-          dense 
-          flat  
-          icon="add"
-
-          label="add member"
-
-        />
-
-        </q-item-label>
-        <q-separator/>
-
-        <q-item v-for="user in userList"
-          :key="user.name"
-          v-bind="user">
-        
-          <q-item-section side>
-            <q-avatar v-if="user.icon!='person'" size="3rem"><img :src="user.icon"></q-avatar>
-            <q-avatar v-else rounded :icon="user.icon" ></q-avatar>
-
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>{{user.name}}</q-item-label>
-            <q-item-label lines="3">{{user.status}}</q-item-label>
-          </q-item-section>
-
-
-          <q-item-section side>
-            <q-badge :color= "user.online ? 'green-7' : 'red-7'">
-              {{ user.online ? "Online" : "Offline"}}
-            </q-badge>
-          </q-item-section>
-
-
-        
-        
-        </q-item>
-
-      </q-list>
-        
-    </q-drawer>
-
+    <!-- <UserProfile :user="selectedUser" v-if="profile" @close="profile = false"/> -->
+    
     <q-page-container>
       <q-page class="column justify-end">
         <q-infinite-scroll reverse class="full-width">
-            <q-item v-for="message in messages" :key=message.text v-bind:message class="hovered">
+           <!--fill in user's name to jancsika-->
+            <q-item v-for="message in messages" :key=message.text v-bind:message :class=" message.mentions != undefined && message.mentions.indexOf('jancsika') > -1 ?  'hovered mentioned' : 'hovered'">
               <q-item-section side>
                 <q-avatar size=50px><img src='src/assets/kaguya.png'></q-avatar>
                 <!-- <q-avatar v-else rounded :icon="user.icon" ></q-avatar> -->
@@ -142,37 +27,39 @@
                 <q-item-label><b>{{message.from}}</b></q-item-label>
                 <q-item-label lines="4">{{message.text}}</q-item-label>
               </q-item-section>
-          </q-item>
+            </q-item>
+            
           
         </q-infinite-scroll>
       </q-page>
-
-        
-        
-        
-
-
-      
     </q-page-container>
 
     <q-footer class="bg-white text-white" reveal>
       <q-toolbar>
         <q-form @submit.prevent="sendMessage" class="full-width">
-          <q-input  @keydown.enter="sendMessage" outlined bottom-slots v-model="text" label="Type your message..." counter maxlength="200" rounded autogrow class="full-width q-py-lg">
+          <q-input  @keydown.enter.prevent="sendMessage" outlined bottom-slots v-model="text" label="Type your message..." counter maxlength="200" rounded autogrow class="full-width q-py-lg">
             
             <template v-slot:append>
               <q-btn 
-              icon="help" flat ripple="" >
+              icon="help" flat ripple >
             
-                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]" class="text-body1">
-                  /join channelName [private]<br>/invite nickName<br>/revoke nickName<br>/join channelName<br>/kick nickName<br>/list<br>/cancel<br>/quit
+                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]" class="text-body1" style="overflow: visible;">
+                  <div class="tooltip-content">
+          <span>/join<br>/invite<br>/revoke<br>/kick<br>/list<br>/cancel<br>/quit</span>
+          <div class="image-wrapper">
+          <!-- <img src="src\assets\pepper-01.png" class="tooltip-image" /> -->
+          </div>
+        </div>
+
+                  
+                  
                 </q-tooltip>
               </q-btn>
     
             </template>
     
             <template v-slot:after>
-              <q-btn @click="sendMessage" type="submit" round dense flat icon="send" />
+              <q-btn @click="sendMessage" type="submit" round dense flat icon="send"/>
             </template>
           </q-input>
         </q-form>
@@ -186,224 +73,45 @@
   </q-layout>
 
 
+
+
   
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { ref } from 'vue';
+import NavBar from 'src/components/NavBar.vue';
+import MembersDrawer from 'src/components/MembersDrawer.vue';
+import ChannelsDrawer from 'src/components/ChannelsDrawer.vue';
+import { defineComponent, ref } from 'vue';
+//import UserProfile from 'src/components/UserProfile.vue';
+//import { User } from 'src/components/models'
 //import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
-
-const userList = [
-  {
-    name: 'User 1',
-    status: 'first-user',
-    icon: 'person',
-    online: true,
-    //change online to 3 states online, offline, DnD
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kotori.jpg',
-    online: true,
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kaguya.png',
-    online: false,
-    // link: ''
-  },
-  {
-    name: 'User 1',
-    status: 'first-user',
-    icon: 'src/assets/kurumi.jpg',
-    online: true,
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kotori.jpg',
-    online: true,
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kaguya.png',
-    online: false,
-    // link: ''
-  },
-  {
-    name: 'User 1',
-    status: 'first-user',
-    icon: 'person',
-    online: true,
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kotori.jpg',
-    online: true,
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kaguya.png',
-    online: false,
-    // link: ''
-  },
-  {
-    name: 'User 1',
-    status: 'first-user',
-    icon: 'person',
-    online: true,
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kotori.jpg',
-    online: true,
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kaguya.png',
-    online: false,
-    // link: ''
-  },
-  {
-    name: 'User 1',
-    status: 'first-user',
-    icon: 'person',
-    online: true,
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kotori.jpg',
-    online: true,
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kaguya.png',
-    online: false,
-    // link: ''
-  },
-];
-
-
-const channelList = [
-{
-    name: 'Channel 1',
-    //caption: 'first-channel',
-    icon: null,
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    // link: ''
-  },
-];
-
-
 
 export default defineComponent({
   
-name: 'MainLayout',
+  name: 'MainLayout',
+
+  components:{
+    NavBar,
+    MembersDrawer,
+    ChannelsDrawer,
+    //UserProfile
+  },
 
   data () {
     return {
-      channelList,
-      userList,
+
       rigtDrawerOpen: false,
       text: ref(''),
       text1: ref(''),
       ph: ref(''),
       dense: ref(false),
       rightDrawerOpen: ref(true),
+      selectedUser: {},
+      profile: false,
       messages:[
       {
-        text: 'lorem ipsum',
+        text: '@jancsika lorem ipsum',
         from: 'Sanyi',
         mentions: ['jancsika']
       },
@@ -424,26 +132,87 @@ name: 'MainLayout',
   },
 
   methods: {
-    toggleRightDrawer () {
+    toggleMembersDrawer () {
       this.rightDrawerOpen = !this.rightDrawerOpen;
     },
     sendMessage(){
-      if (this.text.trim() != '') {
+      let message = this.text.trim()
+
+      let commands = ['/join','/invite','/revoke','/kick','/list','/cancel','/quit']
+
+      if (message.startsWith(commands[0])){
+        //CREATE/JOIN CHANNEL
+        console.log('CREATE/JOIN CHANNEL')
+      }
+      else if(message.startsWith(commands[1])){
+        //INVITE BROSKI
+        console.log('INVITE BROSKI')
+      }
+      else if(message.startsWith(commands[2])){
+        //PRIVATE KICK
+        console.log('PRIVATE KICK')
+      }
+      else if(message.startsWith(commands[3])){
+        //PUBLIC KICK
+        console.log('PUBLIC KICK')
+      }
+      else if(message.startsWith(commands[4])){
+        //LIST MEMBERS
+        console.log('MEMBERS')
+      }
+      else if(message.startsWith(commands[5])){
+        //LEAVE CHANNEL
+        console.log('LEAVE CHANNEL')
+      }
+      else if(message.startsWith(commands[6])){
+        //DELETE CHANNEL BY OWNER
+        console.log('DELETE CHANNEL BY OWNER')
+      }
+
+
+      if (message != '') {
         this.messages.push(
-        {text: this.text.trim(),
+        {text: message,
         from: 'Sanyi',
         mentions:[]
         })
       }
       
       this.text = ''
-    }
+    },
   }
 });
 </script>
 
 <style lang="scss">
-  .hovered:hover{
+  .hovered:not(.mentioned):hover {
     background-color: $grey-3
   }
+  .mentioned{
+    background-color: $yellow-3
+  }
+  .mentioned:hover{
+    background-color: $yellow-4
+  }
+
+  .tooltip-content {
+  display: flex;
+  align-items: center;
+
+}
+
+.image-wrapper {
+  position: relative;
+  width: 40px;
+  height: 0;
+}
+
+.tooltip-image {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -200px;
+  width: 300px; 
+  height: auto;
+}
 </style>
