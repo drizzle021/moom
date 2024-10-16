@@ -20,6 +20,7 @@
                 <q-item-section side>
                   <q-avatar size=50px><img src='src/assets/kaguya.png'></q-avatar>
                   <!-- <q-avatar v-else rounded :icon="user.icon" ></q-avatar> -->
+                   
 
                 </q-item-section>
 
@@ -84,9 +85,6 @@ import MembersDrawer from 'src/components/MembersDrawer.vue';
 import ChannelsDrawer from 'src/components/ChannelsDrawer.vue';
 import { defineComponent, ref } from 'vue';
 import { useQuasar } from 'quasar'
-//import UserProfile from 'src/components/UserProfile.vue';
-//import { User } from 'src/components/models'
-//import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
 
 export default defineComponent({
   

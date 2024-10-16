@@ -4,6 +4,9 @@
     <q-item-section>Profile</q-item-section>
   </q-item>
   <q-item clickable>
+    <q-item-section>Mention</q-item-section>
+  </q-item>
+  <q-item clickable>
     <q-item-section>Kick</q-item-section>
   </q-item>
 </q-menu>

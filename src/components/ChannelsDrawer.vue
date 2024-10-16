@@ -101,6 +101,7 @@
         addChannelDialog: ref(false),
         channelName: ref(''),
         publicity: ref(false),
+        
       }
 
     },

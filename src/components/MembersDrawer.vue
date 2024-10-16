@@ -44,12 +44,16 @@
 
 
     
-  
+    <MemberMenu/>
   </q-item>
+
+  
 
 </q-list>
   
 </q-drawer>
+
+
 
 
 <q-dialog v-model="addMemberDialog">
@@ -73,7 +77,7 @@
  
 </q-dialog>
 
-<MemberMenu/>
+
 
 
 
