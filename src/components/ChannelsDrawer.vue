@@ -14,9 +14,9 @@
               </q-item-section>
             </q-item>
 
-            <q-item v-for="channel in channelsList" :key="channel.name" v-bind="channel" clickable @click="channelClick(channel)">
+            <q-item v-for="channel in channelList" :key="channel.name" v-bind="channel" clickable @click="channelClick(channel)">
               <q-item-section>
-                <q-avatar v-if="channel.icon==null" size="60px" color="secondary" text-color="white">
+                <q-avatar v-if="channel.icon==''" size="60px" color="secondary" text-color="white">
                   {{ channel.name[0] }}
                 </q-avatar>
                 <q-avatar v-else size="60px">
@@ -27,10 +27,12 @@
                   {{ channel.name }}
                 </q-tooltip>
               </q-item-section>
+
+              <ChannelMenu :channel="channel"/>
             </q-item>
 
           </q-list>
-
+        
       </q-scroll-area>
       
     </q-drawer>
@@ -67,6 +69,10 @@
 
 <script>
   import { defineComponent, ref } from 'vue'
+  import { useQuasar } from 'quasar'
+  import ChannelMenu from './ChannelMenu.vue';
+
+
   const channelsList = [
 {
     name: 'Channel 1',
@@ -95,13 +101,30 @@
 
   export default defineComponent({
     name: 'ChannelsDrawer',
-    components:{},
+    components:{ChannelMenu},
     setup(){
+      const $q = useQuasar(); 
+
       return{
         addChannelDialog: ref(false),
         channelName: ref(''),
         publicity: ref(false),
-        
+
+        addChannelNotif(channelName) {
+        $q.notify({
+          message: 'Joined channel: ' + channelName,
+          //caption: 'created channel',
+          color: 'secondary'
+        })
+        },
+
+        deleteChannelNotif(channelName) {
+        $q.notify({
+          message: 'Deleted channel: ' + channelName,
+          //caption: 'created channel',
+          color: 'secondary'
+        })
+        }
       }
 
     },
@@ -116,6 +139,13 @@
         get(){
           return this.$store.state.ui.channelsDrawerState
         },
+        
+      },
+      channelList:{
+        get(){
+          return this.$store.state.ui.channelList
+        },
+        
       }
     },
 
@@ -127,16 +157,26 @@
         // HIGHLIGHT WHEN ADDED
         if (this.channelName.trim() != '') {
             console.log(this.channelName)
-            this.channelsList.unshift({
-            name: this.channelName.trim(),
-            icon: null,
-            is_private: this.publicity
-            // link: ''
-            },)
+            const channel =  {
+              name: this.channelName,
+              //caption: 'first-channel',
+              icon: null,
+              is_private: 'public'
+              // link: ''
+            }
+
+            this.$store.commit('ui/addChannel', channel);
+            this.addChannelNotif(this.channelName.trim())
         }
         this.channelName=''
-        console.log(this.channelsList)
         
+      },
+      
+      deleteChannel (channel){
+        this.$store.commit('ui/deleteChannel');
+        this.deleteChannelNotif(channel.name);      // Notify the user
+
+
       },
       channelClick(element){
         console.log(element.name)

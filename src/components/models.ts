@@ -13,3 +13,9 @@ export interface User {
   icon: string;
   state: string;
 }
+
+export interface Channel {
+  name: string;
+  icon: string;
+  is_private: boolean;
+}

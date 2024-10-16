@@ -16,19 +16,11 @@
       <q-page class="column justify-end">
           <q-infinite-scroll reverse @load="onLoad" :offset="100">
             <!--fill in user's name to jancsika-->
-              <q-item v-for="message in messages" :key=message.text v-bind:message :class=" message.mentions != undefined && message.text.includes('@jancsika')  ?  'hovered mentioned' : 'hovered'">
-                <q-item-section side>
-                  <q-avatar size=50px><img src='src/assets/kaguya.png'></q-avatar>
-                  <!-- <q-avatar v-else rounded :icon="user.icon" ></q-avatar> -->
-                   
-
-                </q-item-section>
-
-                <q-item-section>
-                  <q-item-label><b>{{message.from}}</b></q-item-label>
-                  <q-item-label lines="4">{{message.text}}</q-item-label>
-                </q-item-section>
-              </q-item>
+            <MessageComponent
+              v-for="message in messages"
+              :key="message.text"
+              :message="message"
+            />
               
             
           </q-infinite-scroll>
@@ -38,7 +30,7 @@
     <q-footer class="bg-white text-white" reveal>
       <q-toolbar>
         <q-form @submit.prevent="sendMessage" class="full-width">
-          <q-input  @keydown.enter.prevent="sendMessage" outlined bottom-slots v-model="text" label="Type your message..." counter maxlength="200" rounded autogrow class="full-width q-py-lg">
+          <q-input  @keydown.enter.prevent="sendMessage" outlined bottom-slots v-model="text" label="Type your message..." counter maxlength="2000" rounded autogrow class="full-width q-py-lg">
             
             <template v-slot:append>
               <q-btn 
@@ -85,6 +77,9 @@ import MembersDrawer from 'src/components/MembersDrawer.vue';
 import ChannelsDrawer from 'src/components/ChannelsDrawer.vue';
 import { defineComponent, ref } from 'vue';
 import { useQuasar } from 'quasar'
+import MessageComponent from 'src/components/MessageComponent.vue';
+
+
 
 export default defineComponent({
   
@@ -94,6 +89,7 @@ export default defineComponent({
     NavBar,
     MembersDrawer,
     ChannelsDrawer,
+    MessageComponent
     //UserProfile
   },
   setup(){
@@ -103,7 +99,7 @@ export default defineComponent({
       messageNotif(from:string) {
         $q.notify({
           message: from,
-          caption: '5 minutes ago',
+          //caption: '5 minutes ago',
           color: 'secondary'
         })
       }
@@ -251,10 +247,43 @@ export default defineComponent({
       if (message.startsWith(commands[0])){
         //CREATE/JOIN CHANNEL
         console.log('CREATE/JOIN CHANNEL')
+        let publicity = true;
+        let channelName = message.split(' ');
+        if (channelName[channelName.length - 1] == '[private]'){
+          publicity = false;
+          channelName = channelName.slice(1,-1);
+        }
+        else{
+          publicity = true;
+          channelName = channelName.slice(1);
+        }
+
+        const channel =  {
+              name: channelName.join(' '),
+              //caption: 'first-channel',
+              icon: null,
+              is_private: publicity
+              // link: ''
+            }
+
+        this.$store.commit('ui/addChannel', channel);
+        //  this.addChannelNotif(this.channelName.trim());
+
+
       }
       else if(message.startsWith(commands[1])){
         //INVITE BROSKI
-        console.log('INVITE BROSKI')
+        console.log('INVITE BROSKI');
+        let userName = message.split(' ')[1];
+        
+        const user = {
+          name: userName,
+          status: '',
+          icon: '',
+          state: '',
+        }
+
+        this.$store.commit('ui/addMember', user);
       }
       else if(message.startsWith(commands[2])){
         //PRIVATE KICK
@@ -263,22 +292,37 @@ export default defineComponent({
       else if(message.startsWith(commands[3])){
         //PUBLIC KICK
         console.log('PUBLIC KICK')
+        let userName = message.split(' ')[1];
+        
+        const user = {
+          name: userName,
+          status: '',
+          icon: '',
+          state: '',
+        }
+        this.$store.commit('ui/kickMember', user);
+
       }
       else if(message.startsWith(commands[4])){
         //LIST MEMBERS
-        console.log('MEMBERS')
+        console.log('MEMBERS');
+        this.$store.commit('ui/toggleMembersDrawer');
+
       }
       else if(message.startsWith(commands[5])){
         //LEAVE CHANNEL
-        console.log('LEAVE CHANNEL')
+        console.log('LEAVE CHANNEL');
+        this.$store.commit('ui/deleteChannel');
       }
       else if(message.startsWith(commands[6])){
         //DELETE CHANNEL BY OWNER
         console.log('DELETE CHANNEL BY OWNER')
+        this.$store.commit('ui/deleteChannel');
+
       }
 
-
-      if (message != '') {
+      else{
+        if (message != '') {
         const newMessage = {
         id: 7,
         text: message,
@@ -291,9 +335,12 @@ export default defineComponent({
         this.messageNotif(newMessage.from);
 
       }
+      }
+      
       
       this.text = ''
     },
+    
     onLoad(){
       setTimeout(() => {
         const messages = [

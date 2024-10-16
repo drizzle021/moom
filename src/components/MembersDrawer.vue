@@ -18,21 +18,21 @@
   </q-item-label>
   <q-separator/>
 
-  <q-item v-for="member in membersList"
+  <q-item v-for="member in memberList"
     :key="member.name"
     v-bind="member"
     clickable
-    @click="showProfile(member)"
+
     >
   
     <q-item-section side>
-      <q-avatar v-if="member.icon!='person'" size="3rem"><img :src="member.icon"></q-avatar>
-      <q-avatar v-else rounded :icon="member.icon" ></q-avatar>
+      <q-avatar v-if="member.icon!=''" size="3rem"><img :src="member.icon"></q-avatar>
+      <q-avatar v-else rounded icon="person" ></q-avatar>
     </q-item-section>
 
     <q-item-section>
       <q-item-label>{{member.name}}</q-item-label>
-      <q-item-label lines="3">{{member.status}}</q-item-label>
+      <q-item-label lines="1">{{member.status}}</q-item-label>
     </q-item-section>
 
 
@@ -44,7 +44,7 @@
 
 
     
-    <MemberMenu/>
+    <MemberMenu :user="member"/>
   </q-item>
 
   
@@ -145,28 +145,42 @@
         get(){
           return this.$store.state.ui.membersDrawerState
         },
+
 /*         set(val){
           this.$store.commit('ui/updateMemberDrawerState',val)
         } */
         
       },
+      memberList:{
+        get(){
+          return this.$store.state.ui.memberList
+        }
+      }
     },
 
     methods: {
 
       addMember () {
         console.log(this.nickname)
+        const user =  {
+          name: this.nickname,
+          status: 'added user',
+          icon: '',
+          state: 'online',
+        }
+        this.$store.commit('ui/addMember', user);
+
 
         // ADD PROPER VERIFICATION OF NAMES AND INFORM THE USER
-        if (this.nickname.trim() != '') {
-          this.membersList.push({
-            name: this.nickname.trim(),
-            status: 'added user',
-            icon: 'person',
-            state: 'online',
-            // link: ''
-          },)
-        }
+        // if (this.nickname.trim() != '') {
+        //   this.membersList.push({
+        //     name: this.nickname.trim(),
+        //     status: 'added user',
+        //     icon: 'person',
+        //     state: 'online',
+        //     // link: ''
+        //   },)
+        // }
         this.nickname=''
         console.log(this.membersList)
       },

@@ -1,41 +1,42 @@
 <template>
-     <q-dialog v-model="profile" class="full-width">
+     <q-dialog v-model="userProfileState" class="full-width" @escape-key="closeDialog" no-backdrop-dismiss no-shake>
       <q-card>
         <q-card-section>
-          <div class="text-h6">{{ user.name }}</div>
+          <div class="text-h6">{{ selectedUser.name }}</div>
+        </q-card-section>
+        <q-card-section>
+          <div class="text-h6">{{ selectedUser.state }}</div>
         </q-card-section>
         <q-card-actions>
-          <q-btn flat label="Close" @click="profile = closeDialog" />
+          <q-btn flat label="Close" @click="closeDialog"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
 </template>
 
 <script>
- import { defineComponent, ref } from 'vue'
+ import { defineComponent } from 'vue'
 
 export default defineComponent({
     name: 'UserProfile',
     components:{},
 
-    props: {
-        user: Object
-    },
-
-    setup(){
-      return{
-        profile: ref(false),
+    computed: {     // same as method - but cached
+      userProfileState:{
+        get(){
+          return this.$store.state.ui.userProfileState
+        },
+      },
+      selectedUser:{
+        get(){
+          return this.$store.state.ui.userProfileSelected
+        },
       }
-
     },
-    emits: ['close'],
-
-    methods: {
-    closeDialog() {
-        this.visible = false;
-        this.$emit('close');
-    },
-  },
-
+    methods:{
+      closeDialog(){
+        this.$store.commit('ui/toggleUserProfile')
+      }
+    }
 })
 </script>
