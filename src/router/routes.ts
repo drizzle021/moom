@@ -3,8 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [],
+    redirect: () => ({name:'chat'})
   },
   {
   path: '/auth',
@@ -14,6 +13,14 @@ const routes: RouteRecordRaw[] = [
       { path: 'login', component: () => import('pages/LoginPage.vue') }
     ]
   },
+  {
+    path: '/channel',
+      component: () => import('layouts/MainLayout.vue'),
+      children: [
+        {path: ':name', component: () => import('pages/MainLayout.vue')},
+        {path: '', name: 'chat', component: () => import('layouts/MainLayout.vue')}
+      ],
+    },
 
   // Always leave this as last one,
   // but you can also remove it

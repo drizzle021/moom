@@ -14,23 +14,23 @@
     
     <q-page-container>
       <q-page class="column justify-end">
-        <q-infinite-scroll reverse class="full-width">
-           <!--fill in user's name to jancsika-->
-            <q-item v-for="message in messages" :key=message.text v-bind:message :class=" message.mentions != undefined && message.mentions.indexOf('jancsika') > -1 ?  'hovered mentioned' : 'hovered'">
-              <q-item-section side>
-                <q-avatar size=50px><img src='src/assets/kaguya.png'></q-avatar>
-                <!-- <q-avatar v-else rounded :icon="user.icon" ></q-avatar> -->
+          <q-infinite-scroll reverse @load="onLoad" :offset="100">
+            <!--fill in user's name to jancsika-->
+              <q-item v-for="message in messages" :key=message.text v-bind:message :class=" message.mentions != undefined && message.text.includes('@jancsika')  ?  'hovered mentioned' : 'hovered'">
+                <q-item-section side>
+                  <q-avatar size=50px><img src='src/assets/kaguya.png'></q-avatar>
+                  <!-- <q-avatar v-else rounded :icon="user.icon" ></q-avatar> -->
 
-              </q-item-section>
+                </q-item-section>
 
-              <q-item-section>
-                <q-item-label><b>{{message.from}}</b></q-item-label>
-                <q-item-label lines="4">{{message.text}}</q-item-label>
-              </q-item-section>
-            </q-item>
+                <q-item-section>
+                  <q-item-label><b>{{message.from}}</b></q-item-label>
+                  <q-item-label lines="4">{{message.text}}</q-item-label>
+                </q-item-section>
+              </q-item>
+              
             
-          
-        </q-infinite-scroll>
+          </q-infinite-scroll>
       </q-page>
     </q-page-container>
 
@@ -83,6 +83,7 @@ import NavBar from 'src/components/NavBar.vue';
 import MembersDrawer from 'src/components/MembersDrawer.vue';
 import ChannelsDrawer from 'src/components/ChannelsDrawer.vue';
 import { defineComponent, ref } from 'vue';
+import { useQuasar } from 'quasar'
 //import UserProfile from 'src/components/UserProfile.vue';
 //import { User } from 'src/components/models'
 //import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
@@ -97,44 +98,153 @@ export default defineComponent({
     ChannelsDrawer,
     //UserProfile
   },
+  setup(){
+    const $q = useQuasar(); 
+    return{
+
+      messageNotif(from:string) {
+        $q.notify({
+          message: from,
+          caption: '5 minutes ago',
+          color: 'secondary'
+        })
+      }
+    }
+  },
 
   data () {
     return {
-
-      rigtDrawerOpen: false,
       text: ref(''),
       text1: ref(''),
       ph: ref(''),
       dense: ref(false),
-      rightDrawerOpen: ref(true),
       selectedUser: {},
       profile: false,
       messages:[
       {
+        id: 1,
         text: '@jancsika lorem ipsum',
         from: 'Sanyi',
         mentions: ['jancsika']
       },
       {
+        id: 2,
         text: 'lorem ipsum',
         from: 'Lajos',
         mentions: []
       },
       {
+        id: 3,
         text: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         from: 'Eszmeralda',
         mentions: []
         
-      }
-      ]
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },{
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'Lajos',
+        mentions: []
+      },
+      ],
+      page:1
       
     }
   },
 
+
+
+
   methods: {
-    toggleMembersDrawer () {
-      this.rightDrawerOpen = !this.rightDrawerOpen;
-    },
     sendMessage(){
       let message = this.text.trim()
 
@@ -171,15 +281,46 @@ export default defineComponent({
 
 
       if (message != '') {
-        this.messages.push(
-        {text: message,
+        const newMessage = {
+        id: 7,
+        text: message,
         from: 'Sanyi',
         mentions:[]
-        })
+        }
+
+        this.messages.push(newMessage);
+
+        this.messageNotif(newMessage.from);
+
       }
       
       this.text = ''
     },
+    onLoad(){
+      setTimeout(() => {
+        const messages = [
+          {id:this.page*3+1,
+            text:'new Message',
+            from:'abc',
+            mentions:[]
+          },
+          {id:this.page*3+2,
+            text:'new Message',
+            from:'abc',
+            mentions:[]
+          },
+          {id:this.page*3+3,
+            text:'new Message',
+            from:'abc',
+            mentions:[]
+          },
+        ];
+        this.messages=[...messages,...this.messages];
+        this.page+=1;
+      },1000)
+
+
+    }
   }
 });
 </script>

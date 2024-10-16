@@ -37,7 +37,7 @@
                                         <q-input v-model="password" type="password" bg-color="white" borderless/>
                                     </div>
                                     <div class="row flex-center q-my-lg flex-center">
-                                        <q-btn type="submit" text-color="white" class="bg-primary">
+                                        <q-btn type="submit" text-color="white" class="bg-primary" @click="login">
                                             Log In
                                         </q-btn>
                                     </div>
@@ -90,7 +90,7 @@
                                             </template>
 
                                         </q-file>
-                                        <q-btn type="submit" text-color="white" class="bg-primary q-mx-md">
+                                        <q-btn type="submit" text-color="white" class="bg-primary q-mx-md" @click="register">
                                             Register
                                         </q-btn>
                                     </div>
@@ -114,9 +114,11 @@
 
 <script>
 import { ref } from 'vue';
+//import { useRouter } from 'vue-router'
 
 export default{
     setup(){
+        //const router = useRouter()
         return{
             tab: ref('login'),
             file: ref(null),
@@ -127,7 +129,17 @@ export default{
             password: ref(''),
         }
 
+    },
+    methods: {
+/*         register(){
+            this.router.push({name:'chat'})
+        },
+        login(){
+            this.router.push({name:'chat'})
+
+        } */
     }
+
 }
 </script>
 

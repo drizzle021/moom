@@ -1,5 +1,5 @@
 <template>
-        <q-drawer v-model="rightDrawerOpen" side="right" :width="400" show-if-above>
+        <q-drawer v-model="membersDrawerState" side="right" :width="400" show-if-above>
 
 <q-list>
   <q-item-label
@@ -64,8 +64,9 @@
       </q-card-section>
 
       <q-card-actions align="right" class="text-primary">
-        <q-btn flat label="Cancel" v-close-popup />
         <q-btn type="submit" flat label="Add Member" v-close-popup/>
+        <q-btn flat label="Cancel" v-close-popup />
+
       </q-card-actions>
     </q-form>
   </q-card>
@@ -91,7 +92,6 @@
     status: 'first-user',
     icon: 'person',
     state: 'online',
-    //change online to 3 states online, offline, DnD
     // link: ''
   },
   {
@@ -135,6 +135,19 @@
         
       }
     },
+
+    computed: {
+      membersDrawerState:{
+        get(){
+          return this.$store.state.ui.membersDrawerState
+        },
+/*         set(val){
+          this.$store.commit('ui/updateMemberDrawerState',val)
+        } */
+        
+      },
+    },
+
     methods: {
 
       addMember () {

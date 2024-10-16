@@ -1,5 +1,5 @@
 <template>
-    <q-drawer 
+    <q-drawer v-model="channelsDrawerState"
       show-if-above
       :width="100"
       class="bg-primary"
@@ -14,7 +14,7 @@
               </q-item-section>
             </q-item>
 
-            <q-item v-for="channel in channelsList" :key="channel.name" v-bind="channel">
+            <q-item v-for="channel in channelsList" :key="channel.name" v-bind="channel" clickable @click="channelClick(channel)">
               <q-item-section>
                 <q-avatar v-if="channel.icon==null" size="60px" color="secondary" text-color="white">
                   {{ channel.name[0] }}
@@ -45,14 +45,19 @@
               <q-card-section class="q-pt-none">
                   <q-input dense v-model="channelName" autofocus @keyup.enter="addChannelDialog = false" />
               </q-card-section>
-              <q-card-actions align="left" class="text-primary">
+              
+              <q-card-section class="q-pt-none">
+                <q-toggle label="Private" v-model="publicity"/>
+              </q-card-section>
+              
+             <!--  <q-card-actions align="left" class="text-primary">
                 <q-radio v-model="publicity" val="public" label="Public" />
                 <q-radio v-model="publicity" val="private" label="Private" />
-              </q-card-actions>
+              </q-card-actions> -->
 
               <q-card-actions align="right" class="text-primary">
-                  <q-btn flat label="Cancel" v-close-popup />
                   <q-btn type="submit" flat label="Add Channel" v-close-popup/>
+                  <q-btn flat label="Cancel" v-close-popup />
               </q-card-actions>
             </q-form>
         </q-card>
@@ -62,27 +67,26 @@
 
 <script>
   import { defineComponent, ref } from 'vue'
-
   const channelsList = [
 {
     name: 'Channel 1',
     //caption: 'first-channel',
     icon: null,
-    type: 'public'
+    is_private: 'public'
     // link: ''
   },
   {
     name: 'Channel 2',
     //caption: 'second-channel',
     icon: 'src/assets/kotori.jpg',
-    type: 'private'
+    is_private: 'private'
     // link: ''
   },
   {
-    name: 'Channel 2',
+    name: 'Channel 3',
     //caption: 'second-channel',
     icon: 'src/assets/kotori.jpg',
-    type: 'public'
+    is_private:'public'
     // link: ''
   },
 ];
@@ -96,7 +100,7 @@
       return{
         addChannelDialog: ref(false),
         channelName: ref(''),
-        publicity: ref('public')
+        publicity: ref(false),
       }
 
     },
@@ -105,6 +109,16 @@
         channelsList
       }
     },
+
+    computed: {
+      channelsDrawerState:{
+        get(){
+          return this.$store.state.ui.channelsDrawerState
+        },
+      }
+    },
+
+
     methods: {
 
       addChannel () {
@@ -115,7 +129,7 @@
             this.channelsList.unshift({
             name: this.channelName.trim(),
             icon: null,
-            type: this.publicity
+            is_private: this.publicity
             // link: ''
             },)
         }
@@ -123,6 +137,12 @@
         console.log(this.channelsList)
         
       },
+      channelClick(element){
+        console.log(element.name)
+        this.$store.commit('ui/switchChannel', element.name);
+        //store.commit('ui/switchChannel', element.name)
+
+      }
     }
 
 
