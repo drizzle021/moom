@@ -6,7 +6,7 @@ const routes: RouteRecordRaw[] = [
     redirect: () => ({name:'chat'})
   },
   {
-  path: '/auth',
+    path: '/auth',
     component: () => import('layouts/AuthLayout.vue'),
     children: [
       // { path: 'register', name: 'register', meta: { guestOnly: true }, component: () => import('pages/RegisterPage.vue') },

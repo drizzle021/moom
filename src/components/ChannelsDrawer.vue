@@ -6,7 +6,7 @@
       >      
       <q-scroll-area style="height: inherit; " >
           <q-list class="column flex-center" >
-            <q-item @click = "addChannelDialog = true" clickable>
+            <q-item @click = "addChannelDialog = true" clickable class="q-mt-md-sm q-mt-xs-xl">
               <q-item-section>
                 <q-avatar size="60px" color="secondary" text-color="white" icon="add">
                     

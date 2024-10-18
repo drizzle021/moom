@@ -86,17 +86,18 @@ export default{
       const registerUser = () => {
         router.push('/'); 
       }
-        return{
-            tab: ref('login'),
-            file: ref(null),
-            name: ref(''),
-            surname: ref(''),
-            nickname: ref(''),
-            email: ref(''),
-            password: ref(''),
-            loginUser,
-            registerUser
-        }
+      
+      return{
+          tab: ref('login'),
+          file: ref(null),
+          name: ref(''),
+          surname: ref(''),
+          nickname: ref(''),
+          email: ref(''),
+          password: ref(''),
+          loginUser,
+          registerUser
+      }
 
     },
 }
@@ -107,7 +108,7 @@ export default{
 
 
 .full-bg{
-    background-image: url('src/assets/moombg.jpg') !important;
+    background-image: url('src/assets/moombg.png') !important;
     background-repeat: no-repeat !important;
     background-size: contain !important;
     background-color: $primary;

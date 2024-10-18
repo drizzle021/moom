@@ -12,7 +12,7 @@
     @click="addMemberDialog = true"
 
     label="add member"
-
+    class="q-mt-md-sm q-mt-xs-xl"
   />
 
   </q-item-label>
@@ -168,7 +168,10 @@
           icon: '',
           state: 'online',
         }
-        this.$store.commit('ui/addMember', user);
+        if (user.name !== ''){
+          this.$store.commit('ui/addMember', user);
+
+        }
 
 
         // ADD PROPER VERIFICATION OF NAMES AND INFORM THE USER

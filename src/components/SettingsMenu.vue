@@ -20,7 +20,7 @@
               label="Logout"
               size="md"
               v-close-popup
-              @click="logout"
+              @click="logoutUser"
             />
           </div>
         </div>
@@ -35,12 +35,20 @@
 
 <script>
  import { defineComponent, ref } from 'vue'
+ import { useRouter } from 'vue-router'
 
 export default defineComponent({
     name: 'SettingsMenu',
     components:{},
 
     setup(){
+      const router = useRouter();
+
+      // logout abd redirect user to login page
+      const logoutUser = () => {
+        router.push('/auth/login'); 
+      }
+
       return{
         notification: ref(false),
         state: ref('online'),
@@ -48,7 +56,8 @@ export default defineComponent({
         { label: 'Online', value: 'online', color: 'green' },
         { label: 'Do not Disturb', value: 'dnd', color: 'red' },
         { label: 'Offline', value: 'offline', color: 'grey' }
-      ]
+        ],
+        logoutUser
       }
 
       

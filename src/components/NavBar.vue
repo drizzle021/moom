@@ -1,5 +1,5 @@
 <template>
-<q-header elevated>
+<q-header class="z-top" elevated>
       <q-toolbar>
 
         <q-btn flat @click="toggleChannelsDrawer">
@@ -37,10 +37,10 @@
 
         
 
-        <q-input outlined v-model="text1" label="Search" maxlength="30" rounded class="q-pa-sm" dense bg-color="white" >
+        <!-- <q-input outlined v-model="text1" label="Search" maxlength="30" rounded class="q-pa-sm" dense bg-color="white" >
           
 
-       </q-input>
+       </q-input> -->
 
 
       </q-toolbar>

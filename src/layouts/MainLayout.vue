@@ -9,17 +9,16 @@
     <MembersDrawer/>
     
     <q-page-container>
-      <q-page class="column justify-end">
-          <q-infinite-scroll reverse @load="onLoad" :offset="100">
-            <!--fill in user's name to jancsika-->
-            <MessageComponent
-              v-for="message in messages"
-              :key="message.text"
-              :message="message"
-            />
+      <q-page class="column justify-end" ref="messagesContainer">
+        <q-infinite-scroll reverse @load="onLoad" :offset="100">
+          <!--fill in user's name to jancsika-->
+          <MessageComponent
+            v-for="message in messages"
+            :key="message.text"
+            :message="message"
+          />
               
-            
-          </q-infinite-scroll>
+        </q-infinite-scroll>
       </q-page>
     </q-page-container>
 
@@ -42,6 +41,9 @@
         <template v-slot:after>
           <q-btn @click="sendMessage" type="submit" round dense flat icon="send"/>
         </template>
+        <template v-slot:hint v-if="isTyping">
+          {{ "Lajos is typing..." }}
+        </template>
       </q-input>
     </q-form>
   </q-toolbar>
@@ -60,7 +62,7 @@
 import NavBar from 'src/components/NavBar.vue';
 import MembersDrawer from 'src/components/MembersDrawer.vue';
 import ChannelsDrawer from 'src/components/ChannelsDrawer.vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, nextTick } from 'vue';
 import { useQuasar } from 'quasar'
 import MessageComponent from 'src/components/MessageComponent.vue';
 
@@ -79,15 +81,28 @@ export default defineComponent({
   },
   setup(){
     const $q = useQuasar(); 
-    return{
 
-      messageNotif(from:string) {
+    const messagesContainer = ref<HTMLElement | null>(null);
+    const scrollToBottom = () => {
+      nextTick(() => {
+        if (messagesContainer.value) {
+          //messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+          window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+        }
+      });
+    };
+
+    return{
+      messageNotif(from:string, text:string) {
         $q.notify({
           message: from,
-          //caption: '5 minutes ago',
+          caption: text,
           color: 'secondary'
         })
-      }
+      },
+
+      scrollToBottom,
+      messagesContainer
     }
   },
 
@@ -215,7 +230,9 @@ export default defineComponent({
         mentions: []
       },
       ],
-      page:1
+      page:1,
+      isTyping: false,
+      typingTimeout: null as number | null
       
     }
   },
@@ -224,10 +241,25 @@ export default defineComponent({
 
 
   methods: {
+    handleTyping() {
+      if (this.typingTimeout !== null) {
+        clearTimeout(this.typingTimeout);
+      }
+
+      this.isTyping = true;
+
+      // Set a delay to hide "is typing" message after user stops typing
+      this.typingTimeout = window.setTimeout(() => {
+        this.isTyping = false;
+      }, 1000); // 1 second delay after user stops typing
+    },
+
     sendMessage(){
       let message = this.text.trim()
 
       let commands = ['/join','/invite','/revoke','/kick','/list','/cancel','/quit']
+
+
 
       if (message.startsWith(commands[0])){
         //CREATE/JOIN CHANNEL
@@ -250,8 +282,9 @@ export default defineComponent({
               is_private: publicity
               // link: ''
             }
-
-        this.$store.commit('ui/addChannel', channel);
+        if (channel.name.trim() != ''){
+          this.$store.commit('ui/addChannel', channel);
+        }
         //  this.addChannelNotif(this.channelName.trim());
 
 
@@ -263,16 +296,28 @@ export default defineComponent({
         
         const user = {
           name: userName,
+          status: 'added user',
+          icon: '',
+          state: '',
+        }
+        if (user.name !== ''){
+          this.$store.commit('ui/addMember', user);
+        }
+        
+      }
+      else if(message.startsWith(commands[2])){
+        //PRIVATE KICK
+        console.log('PRIVATE KICK');
+        let userName = message.split(' ')[1];
+        
+        const user = {
+          name: userName,
           status: '',
           icon: '',
           state: '',
         }
+        this.$store.commit('ui/kickMember', user)
 
-        this.$store.commit('ui/addMember', user);
-      }
-      else if(message.startsWith(commands[2])){
-        //PRIVATE KICK
-        console.log('PRIVATE KICK')
       }
       else if(message.startsWith(commands[3])){
         //PUBLIC KICK
@@ -308,22 +353,27 @@ export default defineComponent({
 
       else{
         if (message != '') {
-        const newMessage = {
-        id: 7,
-        text: message,
-        from: 'Sanyi',
-        mentions:[]
+          const newMessage = {
+            id: 7,
+            text: message,
+            from: 'Sanyi',
+            mentions:[]
+          }
+
+          this.messages.push(newMessage);
+          this.messageNotif(newMessage.from, message);
+          
+          nextTick(() => {
+            this.scrollToBottom();
+          });
+
+
         }
 
-        this.messages.push(newMessage);
-
-        this.messageNotif(newMessage.from);
-
       }
-      }
-      
-      
-      this.text = ''
+      this.text = '';
+      this.isTyping = false;
+      clearTimeout(this.typingTimeout!);
     },
     
     onLoad(){
@@ -347,9 +397,28 @@ export default defineComponent({
         ];
         this.messages=[...messages,...this.messages];
         this.page+=1;
+
+
+
       },1000)
 
 
+    },
+
+  },
+
+
+  mounted() {
+    // Scroll to the bottom when the component is mounted
+    nextTick(() => {
+      this.scrollToBottom();
+    });
+  },
+
+
+  watch:{
+    text(){
+      this.handleTyping()
     }
   }
 });
