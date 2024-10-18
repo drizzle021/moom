@@ -73,29 +73,7 @@
   import ChannelMenu from './ChannelMenu.vue';
 
 
-  const channelsList = [
-{
-    name: 'Channel 1',
-    //caption: 'first-channel',
-    icon: null,
-    is_private: 'public'
-    // link: ''
-  },
-  {
-    name: 'Channel 2',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    is_private: 'private'
-    // link: ''
-  },
-  {
-    name: 'Channel 3',
-    //caption: 'second-channel',
-    icon: 'src/assets/kotori.jpg',
-    is_private:'public'
-    // link: ''
-  },
-];
+
 
 
 
@@ -130,7 +108,7 @@
     },
     data(){
       return{
-        channelsList
+        
       }
     },
 
@@ -146,6 +124,11 @@
           return this.$store.state.ui.channelList
         },
         
+      },
+      selectedChannel:{
+        get(){
+          return this.$store.state.ui.selectedChannel
+        }
       }
     },
 
@@ -173,17 +156,22 @@
       },
       
       deleteChannel (channel){
-        this.$store.commit('ui/deleteChannel');
+        this.$store.commit('ui/deleteChannel', channel);
         this.deleteChannelNotif(channel.name);      // Notify the user
 
 
       },
       channelClick(element){
         console.log(element.name)
-        this.$store.commit('ui/switchChannel', element.name);
+        this.$store.commit('ui/switchChannel', element);
         //store.commit('ui/switchChannel', element.name)
 
       }
+    },
+
+    mounted (){
+      this.$store.commit('ui/switchChannel', this.selectedChannel)
+      this.$store.commit('ui/addChannel', this.selectedChannel)
     }
 
 

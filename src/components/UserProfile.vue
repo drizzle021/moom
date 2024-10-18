@@ -12,13 +12,13 @@
            </div>
        </q-item-section>
        <q-item-section style="word-break: break-word;">
-         <q-item-label lines="5" style="white-space: pre-wrap;">hehe :3</q-item-label>
+         <q-item-label lines="5" style="white-space: pre-wrap;">{{ this.selectedUser.status }}</q-item-label>
        </q-item-section>
 
      </q-item>
 
      <q-card-section>
-       <div class="text-h6">XxLajosxX</div>
+       <div class="text-h6">{{ this.selectedUser.name }}</div>
        <div>Lakatos Lajos | lajos@gmail.com</div>
      </q-card-section>
      <q-card-section>

@@ -1,6 +1,6 @@
 <template>
     <!--fill in user's name to jancsika-->
-    <q-item :class="message.text.includes('@jancsika') ? 'msg hovered mentioned' : 'msg hovered' ">
+    <q-item :class="message.text.includes('@' + this.loggedInProfile.name) ? 'msg hovered mentioned' : 'msg hovered' ">
       <q-item-section side>
         <q-avatar size="50px">
           <img src="src/assets/kaguya.png"/>
@@ -15,13 +15,26 @@
   
 <script>
 export default {
-name: 'MessageComponent',
-props: {
-    message: {
-    type: Object,
-     required: true,
-    },
-},
+  name: 'MessageComponent',
+  props: {
+      message: {
+      type: Object,
+      required: true,
+      },
+  },
+
+  computed:{
+    loggedInProfile:{
+      get(){
+        return this.$store.state.ui.loggedInProfile
+      }
+    }
+
+
+
+}
+
+
 };
 </script>
   

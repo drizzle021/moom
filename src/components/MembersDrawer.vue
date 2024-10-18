@@ -90,43 +90,15 @@
   import { defineComponent, ref } from 'vue'
   import MemberMenu from './MemberMenu.vue';
 
-  const membersList = [
-  {
-    name: 'User 1',
-    status: 'first-user',
-    icon: 'person',
-    state: 'online',
-    // link: ''
-  },
-  {
-    name: 'User 2',
-    status: 'second-user',
-    icon: 'src/assets/kotori.jpg',
-    state: 'online',
-    // link: ''
-  },
-  {
-    name: 'User 3',
-    status: 'second-user',
-    icon: 'src/assets/kaguya.png',
-    state: 'offline',
-    // link: ''
-  },
-  {
-    name: 'User 4',
-    status: 'first-user',
-    icon: 'src/assets/kurumi.jpg',
-    state: 'dnd',
-    // link: ''
-  },
-];
-
 
   export default defineComponent({
     name: 'MembersDrawer',
     components:{MemberMenu},
 
     setup(){
+
+      
+
       return{
         addMemberDialog: ref(false),
         nickname: ref('')
@@ -135,7 +107,7 @@
     },
     data(){
       return{
-        membersList,
+        
         
       }
     },
@@ -154,6 +126,12 @@
       memberList:{
         get(){
           return this.$store.state.ui.memberList
+        }
+      },
+
+      loggedInProfile:{
+        get(){
+          return this.$store.state.ui.loggedInProfile
         }
       }
     },
@@ -185,8 +163,12 @@
         //   },)
         // }
         this.nickname=''
-        console.log(this.membersList)
+
       },
+    },
+
+    mounted (){
+      this.$store.commit('ui/addMember', this.loggedInProfile)
     }
 
 

@@ -7,11 +7,18 @@
     <ChannelsDrawer/>
     
     <MembersDrawer/>
+
+    <UserProfile/>
     
     <q-page-container>
       <q-page class="column justify-end" ref="messagesContainer">
         <q-infinite-scroll reverse @load="onLoad" :offset="100">
           <!--fill in user's name to jancsika-->
+          <template v-slot:loading>
+            <div class="row justify-center q-my-md">
+              <q-spinner color="primary" name="dots" size="40px" />
+            </div>
+          </template>
           <MessageComponent
             v-for="message in messages"
             :key="message.text"
@@ -65,7 +72,7 @@ import ChannelsDrawer from 'src/components/ChannelsDrawer.vue';
 import { defineComponent, ref, nextTick } from 'vue';
 import { useQuasar } from 'quasar'
 import MessageComponent from 'src/components/MessageComponent.vue';
-
+import UserProfile from 'src/components/UserProfile.vue';
 
 
 export default defineComponent({
@@ -76,8 +83,8 @@ export default defineComponent({
     NavBar,
     MembersDrawer,
     ChannelsDrawer,
-    MessageComponent
-    //UserProfile
+    MessageComponent,
+    UserProfile
   },
   setup(){
     const $q = useQuasar(); 
@@ -127,108 +134,108 @@ export default defineComponent({
         from: 'Lajos',
         mentions: []
       },
-      {
-        id: 3,
-        text: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-        from: 'Eszmeralda',
-        mentions: []
+      // {
+      //   id: 3,
+      //   text: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      //   from: 'Eszmeralda',
+      //   mentions: []
         
-      },
-      {
-        id: 4,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 5,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 4,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 5,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 4,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 5,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 4,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 5,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 4,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 5,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 4,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 5,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 4,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 5,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },{
-        id: 4,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
-      {
-        id: 5,
-        text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
-      },
+      // },
+      // {
+      //   id: 4,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 5,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 4,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 5,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 4,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 5,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 4,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 5,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 4,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 5,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 4,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 5,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 4,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 5,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },{
+      //   id: 4,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
+      // {
+      //   id: 5,
+      //   text: 'lorem ipsum',
+      //   from: 'Lajos',
+      //   mentions: []
+      // },
       ],
       page:1,
       isTyping: false,
@@ -376,7 +383,7 @@ export default defineComponent({
       clearTimeout(this.typingTimeout!);
     },
     
-    onLoad(){
+    onLoad(index: number, done: (stop?: boolean) => void){
       setTimeout(() => {
         const messages = [
           {id:this.page*3+1,
@@ -397,7 +404,7 @@ export default defineComponent({
         ];
         this.messages=[...messages,...this.messages];
         this.page+=1;
-
+        done();
 
 
       },1000)
@@ -409,6 +416,7 @@ export default defineComponent({
 
 
   mounted() {
+    //this.messages = this.onLoad();
     // Scroll to the bottom when the component is mounted
     nextTick(() => {
       this.scrollToBottom();

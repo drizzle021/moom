@@ -29,11 +29,19 @@ const mutation: MutationTree<ExampleStateInterface> = {
       },)
 
   },
-  deleteChannel(state:ExampleStateInterface){
-    const channelIndex = state.channelList.findIndex(ch => ch.name === state.selectedChannel);
-    if (channelIndex !== -1) {
-      state.channelList.splice(channelIndex, 1);  // Remove channel from list
+  deleteChannel(state:ExampleStateInterface, channel){
+    if (channel !== null){
+      const channelIndex = state.channelList.findIndex(ch => ch.name === channel!.name);
+      if (channelIndex !== -1) {
+        state.channelList.splice(channelIndex, 1);  // Remove channel from list
+        if (channel.name == state.selectedChannel!.name){
+          state.selectedChannel = state.channelList[0];
+        }
+        
+      }
+
     }
+
   },
 
   addMember(state:ExampleStateInterface, user){

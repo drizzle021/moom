@@ -14,18 +14,18 @@
   </q-item>
 </q-menu>
 
-<UserProfile/>
+
 
 </template>
 
 
 <script>
 import { defineComponent } from 'vue'
-import UserProfile from './UserProfile.vue';
+
 
 export default defineComponent({
     name: 'MemberMenu',
-    components:{UserProfile},
+    components:{},
     props:{
       user: {
         type: Object,

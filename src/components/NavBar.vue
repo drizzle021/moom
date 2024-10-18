@@ -15,14 +15,15 @@
         />
 
         <q-toolbar-title>
-          {{selectedChannel}}
+          {{selectedChannel.name}}
         </q-toolbar-title>
 
         <q-btn 
           dense 
           flat 
           round 
-          icon="account_circle"  
+          icon="account_circle" 
+          @click="openProfile"  
         />
 
         <q-btn 
@@ -65,10 +66,25 @@
       return{
         toggleMembersDrawer,
         toggleChannelsDrawer,
+        
         selectedChannel
 
       }
+      
 
+    },
+    computed: {
+      loggedInProfile:{
+        get(){
+          return this.$store.state.ui.loggedInProfile
+        },
+      },
+    },
+    methods:{
+      openProfile(){
+        this.$store.commit('ui/switchUserProfile', this.loggedInProfile)
+        this.$store.commit('ui/toggleUserProfile')
+      },
     }
 
   })
