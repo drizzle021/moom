@@ -7,10 +7,6 @@
     <ChannelsDrawer/>
     
     <MembersDrawer/>
-
-    <!-- <MembersDrawer v-on:profile-click="showProfile"/> -->
-
-    <!-- <UserProfile :user="selectedUser" v-if="profile" @close="profile = false"/> -->
     
     <q-page-container>
       <q-page class="column justify-end">
@@ -27,40 +23,29 @@
       </q-page>
     </q-page-container>
 
-    <q-footer class="bg-white text-white" reveal>
-      <q-toolbar>
-        <q-form @submit.prevent="sendMessage" class="full-width">
-          <q-input  @keydown.enter.prevent="sendMessage" outlined bottom-slots v-model="text" label="Type your message..." counter maxlength="2000" rounded autogrow class="full-width q-py-lg">
-            
-            <template v-slot:append>
-              <q-btn 
-              icon="help" flat ripple >
-            
-                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]" class="text-body1" style="overflow: visible;">
-                  <div class="tooltip-content">
-          <span>/join<br>/invite<br>/revoke<br>/kick<br>/list<br>/cancel<br>/quit</span>
-          <div class="image-wrapper">
-          <!-- <img src="src\assets\pepper-01.png" class="tooltip-image" /> -->
-          </div>
-        </div>
-
-                  
-                  
-                </q-tooltip>
-              </q-btn>
-    
-            </template>
-    
-            <template v-slot:after>
-              <q-btn @click="sendMessage" type="submit" round dense flat icon="send"/>
-            </template>
-          </q-input>
-        </q-form>
-
-        
-
-      </q-toolbar>
-    </q-footer>
+<q-footer class="bg-white text-white fixed-footer">
+  <q-toolbar>
+    <q-form @submit.prevent="sendMessage" class="full-width">
+      <q-input @keydown.enter.prevent="sendMessage" outlined bottom-slots v-model="text" label="Type your message..." counter maxlength="2000" rounded autogrow class="full-width q-py-lg">
+        <template v-slot:append>
+          <q-btn icon="help" flat ripple>
+            <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]" class="text-body1" style="overflow: visible;">
+              <div class="tooltip-content">
+                <span>/join<br>/invite<br>/revoke<br>/kick<br>/list<br>/cancel<br>/quit</span>
+                <div class="image-wrapper">
+                  <!-- <img src="src\assets\pepper-01.png" class="tooltip-image" /> -->
+                </div>
+              </div>
+            </q-tooltip>
+          </q-btn>
+        </template>
+        <template v-slot:after>
+          <q-btn @click="sendMessage" type="submit" round dense flat icon="send"/>
+        </template>
+      </q-input>
+    </q-form>
+  </q-toolbar>
+</q-footer>
 
 
   </q-layout>
@@ -385,6 +370,12 @@ export default defineComponent({
   display: flex;
   align-items: center;
 
+}
+
+.fixed-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
 }
 
 .image-wrapper {
