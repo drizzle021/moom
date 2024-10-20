@@ -24,7 +24,7 @@
                 </q-avatar>
 
                 <q-tooltip anchor="center right" self="center left" :offset="[10, 10]" transition-show="fade" transition-duration="400"  class="text-body1">
-                  {{ channel.name }}
+                  {{ channel.name }} [{{ channel.is_private ? 'private':'public' }}]
                 </q-tooltip>
               </q-item-section>
 
@@ -144,7 +144,7 @@
               name: this.channelName,
               //caption: 'first-channel',
               icon: '',
-              is_private: 'public'
+              is_private: this.publicity,
               // link: ''
             }
 

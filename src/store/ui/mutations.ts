@@ -27,17 +27,17 @@ const mutation: MutationTree<ExampleStateInterface> = {
     state.channelList.unshift({
       name: channel.name,
       icon: channel.icon,
-      is_private: channel.publicity 
+      is_private: channel.is_private 
       // link: ''
       },)
 
   },
   deleteChannel(state:ExampleStateInterface, channel){
     if (channel !== null){
-      const channelIndex = state.channelList.findIndex(ch => ch.name === channel!.name);
+      const channelIndex = state.channelList.findIndex(ch => ch.name === channel);
       if (channelIndex !== -1) {
         state.channelList.splice(channelIndex, 1);  // Remove channel from list
-        if (channel.name == state.selectedChannel!.name){
+        if (channel == state.selectedChannel!.name){
           state.selectedChannel = state.channelList[0];
         }
         

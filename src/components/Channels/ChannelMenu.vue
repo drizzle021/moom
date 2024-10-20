@@ -28,7 +28,7 @@
 
         methods: {
             deleteChannel(){
-                this.$store.commit('ui/deleteChannel', this.channel);
+                this.$store.commit('ui/deleteChannel', this.channel.name);
             },
             openSettings(){
               console.log('settings')

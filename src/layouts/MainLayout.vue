@@ -298,13 +298,18 @@ export default defineComponent({
       }
       else if(message.startsWith(commands[5])){
         //LEAVE CHANNEL
+        let channel = message.split(' ')[1];
+
+
         console.log('LEAVE CHANNEL');
-        this.$store.commit('ui/deleteChannel');
+        this.$store.commit('ui/deleteChannel', channel);
       }
       else if(message.startsWith(commands[6])){
         //DELETE CHANNEL BY OWNER
+        let channel = message.split(' ')[1];
+
         console.log('DELETE CHANNEL BY OWNER')
-        this.$store.commit('ui/deleteChannel');
+        this.$store.commit('ui/deleteChannel', channel);
 
       }
 
