@@ -15,7 +15,7 @@
         />
 
         <q-toolbar-title>
-          {{selectedChannel.name}}
+          {{selectedChannel == null ? '' : selectedChannel.name}}
         </q-toolbar-title>
 
         <q-btn 
@@ -37,10 +37,8 @@
         <SettingsMenu></SettingsMenu>
 
         
-
+        <!--Message Search Maybe later-->
         <!-- <q-input outlined v-model="text1" label="Search" maxlength="30" rounded class="q-pa-sm" dense bg-color="white" >
-          
-
        </q-input> -->
 
 
@@ -49,8 +47,7 @@
 </template>
 
 <script>
-  import { defineComponent, computed } from 'vue'
-  import { useStore } from 'src/store'
+  import { defineComponent } from 'vue'
   import SettingsMenu from 'src/components/SettingsMenu.vue';
 
 
@@ -59,16 +56,7 @@
     components:{SettingsMenu},
     
     setup(){
-      const store = useStore()
-      const selectedChannel = computed(() => store.state.ui.selectedChannel)
-      const toggleMembersDrawer = () => store.commit('ui/toggleMembersDrawer')
-      const toggleChannelsDrawer = () => store.commit('ui/toggleChannelsDrawer')
       return{
-        toggleMembersDrawer,
-        toggleChannelsDrawer,
-        
-        selectedChannel
-
       }
       
 
@@ -79,11 +67,22 @@
           return this.$store.state.ui.loggedInProfile
         },
       },
+      selectedChannel:{
+        get(){
+          return this.$store.state.ui.selectedChannel
+        },
+      },
     },
     methods:{
       openProfile(){
         this.$store.commit('ui/switchUserProfile', this.loggedInProfile)
         this.$store.commit('ui/toggleUserProfile')
+      },
+      toggleMembersDrawer(){
+        this.$store.commit('ui/toggleMembersDrawer')
+      },
+      toggleChannelsDrawer(){
+        this.$store.commit('ui/toggleChannelsDrawer')
       },
     }
 

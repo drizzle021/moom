@@ -2,21 +2,20 @@
   <q-layout view="hHh LpR lfr">
    <NavBar/>
 
-    <!--on mobile layout add button for opening channel list-->
-
     <ChannelsDrawer/>
     
     <MembersDrawer/>
 
     <UserProfile/>
+
+    <!-- Make into components -->
     
     <q-page-container>
       <q-page class="column justify-end" ref="messagesContainer">
         <q-infinite-scroll reverse @load="onLoad" :offset="100">
-          <!--fill in user's name to jancsika-->
           <template v-slot:loading>
             <div class="row justify-center q-my-md">
-              <q-spinner color="primary" name="dots" size="40px" />
+              <q-spinner color="primary" size="40px" />
             </div>
           </template>
           <MessageComponent
@@ -49,7 +48,7 @@
           <q-btn @click="sendMessage" type="submit" round dense flat icon="send"/>
         </template>
         <template v-slot:hint v-if="isTyping">
-          {{ "Lajos is typing..." }}
+          {{ "user is typing..." }}
         </template>
       </q-input>
     </q-form>
@@ -57,22 +56,20 @@
 </q-footer>
 
 
-  </q-layout>
-
-
-
+</q-layout>
 
   
 </template>
 
 <script lang="ts">
 import NavBar from 'src/components/NavBar.vue';
-import MembersDrawer from 'src/components/MembersDrawer.vue';
-import ChannelsDrawer from 'src/components/ChannelsDrawer.vue';
-import { defineComponent, ref, nextTick } from 'vue';
-import { useQuasar } from 'quasar'
-import MessageComponent from 'src/components/MessageComponent.vue';
+import MembersDrawer from 'src/components/Members/MembersDrawer.vue';
+import ChannelsDrawer from 'src/components/Channels/ChannelsDrawer.vue';
+import MessageComponent from 'src/components/Members/MessageComponent.vue';
 import UserProfile from 'src/components/UserProfile.vue';
+import { defineComponent, ref, nextTick, watch } from 'vue';
+import { useQuasar } from 'quasar'
+
 
 
 export default defineComponent({
@@ -90,6 +87,11 @@ export default defineComponent({
     const $q = useQuasar(); 
 
     const messagesContainer = ref<HTMLElement | null>(null);
+
+    watch(() => $q.appVisible, val => {
+      console.log(val ? 'App became visible' : 'App went in the background')
+    })
+
     const scrollToBottom = () => {
       nextTick(() => {
         if (messagesContainer.value) {
@@ -101,11 +103,15 @@ export default defineComponent({
 
     return{
       messageNotif(from:string, text:string) {
-        $q.notify({
+        if ($q.appVisible){
+          $q.notify({
           message: from,
           caption: text,
           color: 'secondary'
         })
+
+        }
+        
       },
 
       scrollToBottom,
@@ -116,126 +122,73 @@ export default defineComponent({
   data () {
     return {
       text: ref(''),
-      text1: ref(''),
-      ph: ref(''),
-      dense: ref(false),
       selectedUser: {},
       profile: false,
       messages:[
       {
         id: 1,
-        text: '@jancsika lorem ipsum',
-        from: 'Sanyi',
-        mentions: ['jancsika']
+        text: 'lorem ipsum',
+        from: 'User 1',
       },
       {
         id: 2,
         text: 'lorem ipsum',
-        from: 'Lajos',
-        mentions: []
+        from: 'User 2',
       },
-      // {
-      //   id: 3,
-      //   text: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      //   from: 'Eszmeralda',
-      //   mentions: []
-        
-      // },
-      // {
-      //   id: 4,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 5,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 4,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 5,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 4,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 5,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 4,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 5,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 4,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 5,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 4,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 5,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 4,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 5,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },{
-      //   id: 4,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
-      // {
-      //   id: 5,
-      //   text: 'lorem ipsum',
-      //   from: 'Lajos',
-      //   mentions: []
-      // },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'User 1',
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'User 2',
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'User 1',
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'User 2',
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'User 2',
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'User 2',
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'User 1',
+      },
+      {
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'User 1',
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'User 1',
+      },{
+        id: 4,
+        text: 'lorem ipsum',
+        from: 'User 3',
+      },
+      {
+        id: 5,
+        text: 'lorem ipsum',
+        from: 'User 3',
+      },
       ],
       page:1,
       isTyping: false,
@@ -243,9 +196,6 @@ export default defineComponent({
       
     }
   },
-
-
-
 
   methods: {
     handleTyping() {
@@ -305,7 +255,7 @@ export default defineComponent({
           name: userName,
           status: 'added user',
           icon: '',
-          state: '',
+          state: 'online',
         }
         if (user.name !== ''){
           this.$store.commit('ui/addMember', user);
@@ -363,8 +313,7 @@ export default defineComponent({
           const newMessage = {
             id: 7,
             text: message,
-            from: 'Sanyi',
-            mentions:[]
+            from: 'user',
           }
 
           this.messages.push(newMessage);
@@ -377,6 +326,30 @@ export default defineComponent({
 
         }
 
+
+
+        //FOR APP VISIBILITY TESTING
+
+
+        // setTimeout(() => {
+        //   if (message != '') {
+        //   const newMessage = {
+        //     id: 7,
+        //     text: message,
+        //     from: 'user',
+        //   }
+
+        //   this.messages.push(newMessage);
+        //   this.messageNotif(newMessage.from, message);
+          
+        //   nextTick(() => {
+        //     this.scrollToBottom();
+        //   });
+
+
+        // }
+        // }, 3000);
+
       }
       this.text = '';
       this.isTyping = false;
@@ -387,19 +360,16 @@ export default defineComponent({
       setTimeout(() => {
         const messages = [
           {id:this.page*3+1,
-            text:'new Message',
-            from:'abc',
-            mentions:[]
+            text:'old Message',
+            from:'user',
           },
           {id:this.page*3+2,
-            text:'new Message',
-            from:'abc',
-            mentions:[]
+            text:'old Message',
+            from:'user',
           },
           {id:this.page*3+3,
-            text:'new Message',
-            from:'abc',
-            mentions:[]
+            text:'old Message',
+            from:'user',
           },
         ];
         this.messages=[...messages,...this.messages];
@@ -415,8 +385,8 @@ export default defineComponent({
   },
 
 
+
   mounted() {
-    //this.messages = this.onLoad();
     // Scroll to the bottom when the component is mounted
     nextTick(() => {
       this.scrollToBottom();
@@ -428,7 +398,8 @@ export default defineComponent({
     text(){
       this.handleTyping()
     }
-  }
+  },
+  
 });
 </script>
 

@@ -17,7 +17,7 @@ function state(): ExampleStateInterface {
     channelsDrawerState: true,
     selectedChannel: {
       name: 'lol',
-      icon: '',
+      icon: 'src/assets/chitoge.jpg',
       is_private: false
     },
     userProfileState: false,
@@ -25,9 +25,12 @@ function state(): ExampleStateInterface {
     channelList: [],
     memberList: [],
     loggedInProfile: {  
-      name: 'peti',
+      firstName: 'firstname',
+      lastName: 'lastname',
+      name: 'username',
+      email: 'email@abc.com',
       status: 'hello!',
-      icon: '',
+      icon: 'src/assets/kotori.jpg',
       state: 'online',
     }
   };

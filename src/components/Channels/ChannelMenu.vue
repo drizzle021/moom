@@ -1,14 +1,13 @@
 <template>
     <q-menu anchor="bottom left" self="top left" context-menu>
+      <q-item clickable @click="openSettings">
+        <q-item-section>Settings</q-item-section>
+      </q-item>
       <q-item clickable @click="deleteChannel">
         <q-item-section>Delete</q-item-section>
       </q-item>
-      <!-- <q-item clickable>
-        <q-item-section>Mention</q-item-section>
-      </q-item>
-      <q-item clickable>
-        <q-item-section>Kick</q-item-section>
-      </q-item> -->
+      
+
     </q-menu>
     
     </template>
@@ -30,6 +29,9 @@
         methods: {
             deleteChannel(){
                 this.$store.commit('ui/deleteChannel', this.channel);
+            },
+            openSettings(){
+              console.log('settings')
             }
         }
     

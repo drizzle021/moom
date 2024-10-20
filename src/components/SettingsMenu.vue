@@ -34,8 +34,9 @@
 </script>
 
 <script>
- import { defineComponent, ref } from 'vue'
- import { useRouter } from 'vue-router'
+import { defineComponent, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'src/store'
 
 export default defineComponent({
     name: 'SettingsMenu',
@@ -48,22 +49,28 @@ export default defineComponent({
       const logoutUser = () => {
         router.push('/auth/login'); 
       }
+      const store = useStore()
+      const currentUserState = store.state.ui.loggedInProfile.state
+      
 
       return{
         notification: ref(false),
-        state: ref('online'),
+        state: ref(currentUserState),
         options: [
         { label: 'Online', value: 'online', color: 'green' },
         { label: 'Do not Disturb', value: 'dnd', color: 'red' },
         { label: 'Offline', value: 'offline', color: 'grey' }
         ],
-        logoutUser
+        logoutUser,
+        currentUserState
       }
-
-      
-
     },
 
+    watch:{
+        state(newState){
+          this.$store.commit('ui/switchUserState', newState)
+        }
+    }
 
 })
 </script>

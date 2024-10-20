@@ -143,12 +143,13 @@
             const channel =  {
               name: this.channelName,
               //caption: 'first-channel',
-              icon: null,
+              icon: '',
               is_private: 'public'
               // link: ''
             }
 
             this.$store.commit('ui/addChannel', channel);
+            this.$store.commit('ui/switchChannel',channel);
             this.addChannelNotif(this.channelName.trim())
         }
         this.channelName=''
@@ -164,17 +165,18 @@
       channelClick(element){
         console.log(element.name)
         this.$store.commit('ui/switchChannel', element);
-        //store.commit('ui/switchChannel', element.name)
 
       }
     },
 
+    // pull saved channel from store add it to channels and switch to it
     mounted (){
-      this.$store.commit('ui/switchChannel', this.selectedChannel)
-      this.$store.commit('ui/addChannel', this.selectedChannel)
+      if(this.channelList.length == 0){
+        this.$store.commit('ui/addChannel', this.selectedChannel)
+        this.$store.commit('ui/switchChannel', this.selectedChannel)
+        
+      }
     }
-
-
   })
 
 

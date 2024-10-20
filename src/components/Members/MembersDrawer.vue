@@ -88,7 +88,7 @@
 
 <script>
   import { defineComponent, ref } from 'vue'
-  import MemberMenu from './MemberMenu.vue';
+  import MemberMenu from 'src/components/Members/MemberMenu.vue';
 
 
   export default defineComponent({
@@ -139,36 +139,30 @@
     methods: {
 
       addMember () {
-        console.log(this.nickname)
-        const user =  {
-          name: this.nickname,
-          status: 'added user',
-          icon: '',
-          state: 'online',
-        }
-        if (user.name !== ''){
-          this.$store.commit('ui/addMember', user);
-
-        }
-
-
         // ADD PROPER VERIFICATION OF NAMES AND INFORM THE USER
-        // if (this.nickname.trim() != '') {
-        //   this.membersList.push({
-        //     name: this.nickname.trim(),
-        //     status: 'added user',
-        //     icon: 'person',
-        //     state: 'online',
-        //     // link: ''
-        //   },)
-        // }
+        if (this.nickname.trim() != '') {
+          const user =  {
+            name: this.nickname.trim(),
+            status: 'added user',
+            icon: '',
+            state: 'online',
+          }
+          if (user.name !== ''){
+            this.$store.commit('ui/addMember', user);
+
+          }
+        }
+ 
         this.nickname=''
 
       },
     },
 
     mounted (){
-      this.$store.commit('ui/addMember', this.loggedInProfile)
+      if(this.memberList.length == 0){
+        this.$store.commit('ui/addMember', this.loggedInProfile)
+      }
+
     }
 
 

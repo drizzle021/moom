@@ -19,11 +19,14 @@ const mutation: MutationTree<ExampleStateInterface> = {
   switchUserProfile(state:ExampleStateInterface, user){
     state.userProfileSelected = user
   },
+  switchUserState(state:ExampleStateInterface, userState){
+    state.loggedInProfile.state = userState
+  },
 
   addChannel(state:ExampleStateInterface, channel){
     state.channelList.unshift({
       name: channel.name,
-      icon: '',
+      icon: channel.icon,
       is_private: channel.publicity 
       // link: ''
       },)

@@ -8,7 +8,10 @@ export interface Meta {
 }
 
 export interface User {
+  firstName:string,
+  lastName: string,
   name: string;
+  email: string,
   status: string;
   icon: string;
   state: string;

@@ -1,5 +1,4 @@
 <template>
-    <!--fill in user's name to jancsika-->
     <q-item :class="message.text.includes('@' + this.loggedInProfile.name) ? 'msg hovered mentioned' : 'msg hovered' ">
       <q-item-section side>
         <q-avatar size="50px">
